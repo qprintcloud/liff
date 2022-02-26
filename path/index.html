@@ -14,11 +14,34 @@
   <p id="displayName"><b>displayName:</b> </p>
   <p id="statusMessage"><b>statusMessage:</b> </p>
   <p id="decodedIDToken"><b>email:</b> </p>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <script>
     // Query Params
     const queryString = decodeURIComponent(window.location.search);
     const params = new URLSearchParams(queryString);
     document.getElementById("param").append(params.get("param"));
+    async function main() {
+      // alert("LINE Developers x Skooldio")
+      await liff.init({ liffId: "1656924693-ON59RjLY" })
+      document.getElementById("isLoggedIn").append(liff.isLoggedIn())
+      if (liff.isLoggedIn()){
+        getUserProfile()
+      }else{
+        liff.login({ redirectUri: "https://qprintcloud.github.io/liff/path"})
+      }
+      
+    }
+    main()
+
+    async function getUserProfile() {
+      const profile = await liff.getProfile()
+      console.log(profile)
+      document.getElementById("pictureUrl").src = profile.pictureUrl
+      document.getElementById("userId").append(profile.userId)
+      document.getElementById("statusMessage").append(profile.statusMessage)
+      document.getElementById("displayName").append(profile.displayName)
+      document.getElementById("decodedIDToken").append(liff.getDecodedIDToken().email)
+    }
   </script>
 </body>
 </html>
